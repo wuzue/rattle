@@ -57,7 +57,7 @@ def main(stdscr):
             if file_list:
                 selected_file = file_list[selected_index]
                 file_path = os.path.join(current_dir, selected_file)
-                play_song(file_path)
+                play_song(file_path, stdscr)
         
         # update file list if the current directory changes
         if file_list and selected_index < len(file_list):
