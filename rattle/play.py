@@ -20,12 +20,12 @@ def play_song(file_path, stdscr):
 
     while True:
         stdscr.clear()
-        print("Press P to pause, R to resume and E to exit the program")
+        stdscr.addstr(0, 0, "Press P to pause, R to resume and E to exit the program")
 
         key = stdscr.getch()
     
         if key == ord('p'):
-            if mixer.music.get_busy():
+            if mixer.music.get_pos() > 0: # check if song has been played
                 mixer.music.pause()
         elif key == ord('r'):
             if mixer.music.get_pos() > 0: # check if song has been played
