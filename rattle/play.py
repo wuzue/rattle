@@ -6,12 +6,15 @@ import random
 import numpy as np
 
 def play_song(file_path, stdscr):
+    
     mixer.init()
+    pygame.init()
     pygame.mixer.init()
+
     mixer.music.load(file_path)
     mixer.music.set_volume(0.5)
     mixer.music.play()
-
+    
     audio = MP3(file_path)
     total_time = int(audio.info.length)
 
@@ -21,6 +24,11 @@ def play_song(file_path, stdscr):
     while True:
         stdscr.clear()
         stdscr.addstr(0, 0, "Press P to pause, R to resume and E to exit the program")
+
+        # visualization: time remaining
+        if pygame.mixer.music.get_busy():
+            remaining_time = total_time - (pygame.mixer.music.get_pos() // 1000)
+            stdscr.addstr(2, 0, "Time Remaining: {:02d}:{:02d}".format(remaining_time // 60, remaining_time % 60))
 
         key = stdscr.getch()
     
@@ -34,13 +42,7 @@ def play_song(file_path, stdscr):
             mixer.music.stop()
             break
     
-        # visualization: time remaining
-        if pygame.mixer.music.get_busy():
-            current_time = pygame.mixer.music.get_pos() // 1000 # convert miliseconds to seconds
-            remaining_time = total_time - current_time
-            stdscr.addstr(2, 0, "Time Remaining: {:02d}:{:02d}".format(remaining_time // 60, remaining_time % 60))
-
-       
+              
         stdscr.refresh()
 
     pygame.quit()
