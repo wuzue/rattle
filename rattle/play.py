@@ -30,7 +30,7 @@ def play_song(file_path, stdscr):
     while True:
         stdscr.clear()
         stdscr.addstr(0, 0, f"Now playing: {file_name}")
-        stdscr.addstr(1, 0, "Press P to pause, R to resume and E to exit the program")
+        stdscr.addstr(1, 0, "Press P to pause, R to resume, v to increase volume, shift+v to decrease, E to exit the program")
 
         # calculate time remaining
         elapsed_time = mixer.music.get_pos() / 1000
@@ -65,7 +65,18 @@ def play_song(file_path, stdscr):
         elif key == ord('e'):
             mixer.music.stop()
             break
-    
+        elif key == ord('v'):
+            volume += 11 # increase volume by 10
+            if volume > 100:
+                volume = 100
+            mixer.music.set_volume(volume / 100)
+        elif key == ord('V'):
+            volume -= 11 # decrease volume by 10
+            if volume < 0:
+                volume = 0
+            mixer.music.set_volume(volume / 100)
+
+
               
         stdscr.refresh()
 
