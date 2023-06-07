@@ -21,14 +21,28 @@ def play_song(file_path, stdscr):
     stdscr.nodelay(True) # set non-blocking mode for input 
     stdscr.timeout(100) # set input timeout to 100 ms
 
+    progress_bar_length = 20
+
     while True:
         stdscr.clear()
         stdscr.addstr(0, 0, "Press P to pause, R to resume and E to exit the program")
 
-        # visualization: time remaining
-        if pygame.mixer.music.get_busy():
-            remaining_time = total_time - (pygame.mixer.music.get_pos() // 1000)
-            stdscr.addstr(2, 0, "Time Remaining: {:02d}:{:02d}".format(remaining_time // 60, remaining_time % 60))
+        # calculate time remaining
+        elapsed_time = mixer.music.get_pos() / 1000
+        remaining_time = total_time - elapsed_time
+
+        # format the time remaining as minutes:seconds
+        minutes = int(remaining_time // 60)
+        seconds = int(remaining_time % 60)
+        time_remaining = f"Time Remaining: {minutes:02d}:{seconds:02d}"
+
+        # calculate the progress bar
+        progress = int((elapsed_time / total_time) * progress_bar_length)
+        progress_bar = "[" + "#" * progress + "-" * (progress_bar_length - progress) + "]"
+
+        # display time remaining and progress bar
+        stdscr.addstr(2, 0, time_remaining)
+        stdscr.addstr(4, 0, progress_bar)
 
         key = stdscr.getch()
     
