@@ -17,22 +17,32 @@ def draw_file_list(stdscr, file_list, selected_index):
     # get screen dimensions
     height, width = stdscr.getmaxyx()
 
+    stdscr.addstr(0, 0, "welcome to rattle, the command-line music player!")
+
+
+     # display the file name
+    stdscr.addstr(2, 0, "=============== SONGS ===============")
+
     # display file names
     for i, file_name in enumerate(file_list):
         # set the text attributes based on whether the file is selected
         if i == selected_index:
-            stdscr.attron(curses.A_REVERSE)
+            stdscr.attron(curses.color_pair(1))
         else:
-            stdscr.attroff(curses.A_REVERSE)
+            stdscr.attroff(curses.color_pair(2))
         
-        # display the file name
-        stdscr.addstr(2, 0, "=============== SONGS ===============")
         stdscr.addstr(i + 3, 0, file_name)
 
     # refresh screen to display the changes
     stdscr.refresh()
 
 def main(stdscr):
+
+    # set up colors for highlighting songs
+    curses.start_color()
+    curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE) # selected
+    curses.init_pair(2, curses.COLOR_WHITE, curses.COLOR_BLACK) # unselected
+
     # set the input mode
     stdscr.keypad(True)
     curses.curs_set(0)
@@ -43,10 +53,8 @@ def main(stdscr):
     selected_index = 0
 
     while True:
-        
+              
         draw_file_list(stdscr, file_list, selected_index)
-
-        stdscr.addstr(0, 0, "welcome to rattle, the command-line music player!")
 
         # wait for user input 
         key = stdscr.getch()

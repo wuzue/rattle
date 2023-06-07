@@ -48,6 +48,11 @@ def play_song(file_path, stdscr):
         # display time remaining and progress bar
         stdscr.addstr(2, 0, time_remaining)
         stdscr.addstr(4, 0, progress_bar)
+        
+        # get current volume
+        volume = int(mixer.music.get_volume() * 100)
+        volume_display = f"Volume: {volume}%"
+        stdscr.addstr(6, 0, volume_display)
 
         key = stdscr.getch()
     
@@ -65,5 +70,3 @@ def play_song(file_path, stdscr):
         stdscr.refresh()
 
     pygame.quit()
-
-        
