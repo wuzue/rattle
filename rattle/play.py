@@ -1,5 +1,6 @@
 from pygame import mixer
 import pygame
+import os
 import curses
 from mutagen.mp3 import MP3
 import random
@@ -23,9 +24,13 @@ def play_song(file_path, stdscr):
 
     progress_bar_length = 20
 
+    # detect current song
+    file_name = os.path.basename(file_path)
+
     while True:
         stdscr.clear()
-        stdscr.addstr(0, 0, "Press P to pause, R to resume and E to exit the program")
+        stdscr.addstr(0, 0, f"Now playing: {file_name}")
+        stdscr.addstr(1, 0, "Press P to pause, R to resume and E to exit the program")
 
         # calculate time remaining
         elapsed_time = mixer.music.get_pos() / 1000

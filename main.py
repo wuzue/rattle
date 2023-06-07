@@ -26,7 +26,8 @@ def draw_file_list(stdscr, file_list, selected_index):
             stdscr.attroff(curses.A_REVERSE)
         
         # display the file name
-        stdscr.addstr(i, 0, file_name)
+        stdscr.addstr(2, 0, "=============== SONGS ===============")
+        stdscr.addstr(i + 3, 0, file_name)
 
     # refresh screen to display the changes
     stdscr.refresh()
@@ -44,6 +45,8 @@ def main(stdscr):
     while True:
         
         draw_file_list(stdscr, file_list, selected_index)
+
+        stdscr.addstr(0, 0, "welcome to rattle, the command-line music player!")
 
         # wait for user input 
         key = stdscr.getch()
