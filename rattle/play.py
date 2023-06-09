@@ -3,8 +3,6 @@ import pygame
 import os
 import curses
 from mutagen.mp3 import MP3
-import random
-import numpy as np
 
 def play_song(file_path, stdscr):
     
@@ -22,14 +20,30 @@ def play_song(file_path, stdscr):
     stdscr.nodelay(True) # set non-blocking mode for input 
     stdscr.timeout(100) # set input timeout to 100 ms
 
-    progress_bar_length = 20
+    progress_bar_length = 20    
+    
+    current_dir = os.path.expanduser('~/Música/')
 
-    # detect current song
-    file_name = os.path.basename(file_path)
+    def get_files(directory):
+    # get a list of files in the specified directory
+        files = os.listdir(directory)
+
+    # filter out directories and return the file names
+        return [f for f in files if os.path.isfile(os.path.join(directory, f))]
+
+    file_list = get_files(current_dir)
+    current_song_index  = file_list.index(os.path.basename(file_path))
+
 
     while True:
         stdscr.clear()
-        stdscr.addstr(0, 0, f"Now playing: {file_name}")
+
+        current_song = os.path.basename(file_path)
+        next_song_index = (current_song_index + 1) % len(file_list)
+        next_song = file_list[next_song_index]
+
+        text_bold = f"Now Playing: {current_song}, Next is {next_song}"
+        stdscr.addstr(0, 0, text_bold, curses.A_BOLD | curses.COLOR_RED)
         stdscr.addstr(1, 0, "Press P to pause, R to resume, v to increase volume, shift+v to decrease, E to exit the program")
 
         # calculate time remaining
@@ -55,7 +69,8 @@ def play_song(file_path, stdscr):
         stdscr.addstr(6, 0, volume_display)
 
         key = stdscr.getch()
-    
+        
+
         if key == ord('p'):
             if mixer.music.get_pos() > 0: # check if song has been played
                 mixer.music.pause()
@@ -75,9 +90,12 @@ def play_song(file_path, stdscr):
             if volume < 0:
                 volume = 0
             mixer.music.set_volume(volume / 100)
+        elif key == ord('n'):
+            mixer.music.stop()
+            next_song_index = (current_song_index + 1) % len(file_list)   
+            next_song = file_list[next_song_index]
+            play_song(os.path.join(current_dir, next_song), stdscr)
 
-
-              
         stdscr.refresh()
 
     pygame.quit()
