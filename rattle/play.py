@@ -44,7 +44,7 @@ def play_song(file_path, stdscr):
 
         text_bold = f"Now Playing: {current_song}, Next is {next_song}"
         stdscr.addstr(0, 0, text_bold, curses.A_BOLD | curses.COLOR_RED)
-        stdscr.addstr(1, 0, "Press P to pause, R to resume, v to increase volume, shift+v to decrease, E to exit the program")
+        stdscr.addstr(1, 0, "p = pause, r = resume, v = volume up, shift+v = volume down, n = next song, b = previous song, e = exit")
 
         # calculate time remaining
         elapsed_time = mixer.music.get_pos() / 1000
@@ -95,6 +95,11 @@ def play_song(file_path, stdscr):
             next_song_index = (current_song_index + 1) % len(file_list)   
             next_song = file_list[next_song_index]
             play_song(os.path.join(current_dir, next_song), stdscr)
+        elif key == ord('b'):
+            mixer.music.stop()
+            previous_song_index = (current_song_index - 1) % len(file_list)
+            previous_song = file_list[previous_song_index]
+            play_song(os.path.join(current_dir, previous_song), stdscr)
 
         stdscr.refresh()
 
