@@ -41,9 +41,12 @@ def play_song(file_path, stdscr):
         current_song = os.path.basename(file_path)
         next_song_index = (current_song_index + 1) % len(file_list)
         next_song = file_list[next_song_index]
+        previous_song_index = (current_song_index - 1) % len(file_list)
+        previous_song = file_list[previous_song_index]
 
-        text_bold = f"Now Playing: {current_song}, Next is {next_song}"
+        text_bold = f"Previous: {previous_song} | Now Playing: {current_song} | Next: {next_song}"
         stdscr.addstr(0, 0, text_bold, curses.A_BOLD | curses.COLOR_RED)
+
         stdscr.addstr(1, 0, "p = pause, r = resume, v = volume up, shift+v = volume down, n = next song, b = previous song, e = exit")
 
         # calculate time remaining
