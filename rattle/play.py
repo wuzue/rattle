@@ -34,7 +34,6 @@ def play_song(file_path, stdscr):
     file_list = get_files(current_dir)
     current_song_index  = file_list.index(os.path.basename(file_path))
 
-
     while True:
         stdscr.clear()
 
@@ -103,6 +102,22 @@ def play_song(file_path, stdscr):
             previous_song_index = (current_song_index - 1) % len(file_list)
             previous_song = file_list[previous_song_index]
             play_song(os.path.join(current_dir, previous_song), stdscr)
+        elif key == ord('f'):
+            mixer.music.stop()
+            fast_forward_time = 3 # seconds to fast forward
+            fast_forward_pos = mixer.music.get_pos() + (fast_forward_time * 1000)
+            if fast_forward_pos > total_time * 1000:
+                fast_forward_pos = total_time * 1000
+            mixer.music.play(start=int(fast_forward_pos / 1000))
+        elif key == ord('w'):
+            mixer.music.stop()
+            rewind_time = 3 # seconds to rewind
+            rewind_pos = mixer.music.get_pos() - (rewind_time * 1000)
+            if rewind_pos < 0:
+               rewind_pos = 0
+            mixer.music.play(start=int(rewind_pos / 1000))
+
+
 
         stdscr.refresh()
 
